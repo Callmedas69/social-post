@@ -1,14 +1,14 @@
 ---
 name: social-post
-version: 1.3.0
-description: Post and reply to X/Twitter and Farcaster with text and images. Features multi-account support, draft preview, cost transparency, character validation, threads, replies, and image uploads. Consumption-based pricing for X API, pay-per-cast for Farcaster.
+version: 1.4.0
+description: Post and reply to X/Twitter and Farcaster with text and images. Features multi-account support, auto-variation to avoid duplicate content detection, draft preview, character validation, threads, replies, and image uploads. Consumption-based pricing for X API, pay-per-cast for Farcaster.
 author: 0xdas
 license: MIT
-tags: [twitter, farcaster, social, posting, automation, threads, x-api, consumption-based, multi-account]
+tags: [twitter, farcaster, social, posting, automation, threads, x-api, consumption-based, multi-account, anti-spam]
 metadata:
   openclaw:
     requires:
-      bins: [bash, curl, jq, python3]
+      bins: [bash, curl, jq, python3, shuf]
       env: [X_CONSUMER_KEY, X_CONSUMER_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET]
 ---
 
@@ -19,6 +19,7 @@ Post to Twitter and/or Farcaster with automatic character limit validation and i
 ## Features
 
 - ✅ **Multi-account support** - manage multiple Twitter accounts from one skill
+- ✅ **Auto-variation** - avoid Twitter's duplicate content detection with `--vary` flag
 - ✅ Post to Twitter only
 - ✅ Post to Farcaster only  
 - ✅ Post to both platforms simultaneously
@@ -250,6 +251,7 @@ scripts/reply.sh --twitter 123456 --farcaster 0xabcd... "Great discussion!"
 - `--twitter` - Post to Twitter only
 - `--farcaster` - Post to Farcaster only
 - `--account <name>` - Twitter account to use (lowercase prefix from .env)
+- `--vary` - Auto-vary text to avoid duplicate content detection
 - `--image <path>` - Attach image
 - `--thread` - Split long text into numbered thread
 - `--shorten-links` - Shorten URLs to save characters
@@ -278,6 +280,9 @@ scripts/post.sh "gm! Building onchain 🦞"
 
 # Post from specific Twitter account
 scripts/post.sh --account myaccount --twitter "Message from my second account"
+
+# Auto-vary text to avoid duplicate content detection
+scripts/post.sh --vary --twitter "Same text, subtle variations added automatically"
 
 # Twitter announcement with image
 scripts/post.sh --twitter --image ~/screenshot.png "New feature shipped! 🚀"

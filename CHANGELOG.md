@@ -2,6 +2,38 @@
 
 All notable changes to the social-post skill will be documented in this file.
 
+## [1.4.0] - 2026-02-10
+
+### Added
+- **Auto-variation feature**: New `--vary` flag to avoid Twitter's duplicate content detection
+  - Automatically introduces subtle, natural differences to text
+  - Prevents "duplicate content" errors when posting similar text from multiple accounts
+  - Variations include: emoji additions, punctuation changes, spacing adjustments, synonym swaps
+  - Shows both original and varied text in draft preview
+  - Guarantees visible variation (will always change something)
+  - Works seamlessly with all existing features (images, threads, multi-account)
+- **New variation library**: `lib/variation.sh` with intelligent text transformation functions
+  - `vary_text()`: Applies 2-3 random variations
+  - `vary_punctuation()`: Changes sentence-ending punctuation
+  - `vary_emoji()`: Adds/removes emojis
+  - `vary_spacing()`: Adjusts line breaks
+  - `vary_wording()`: Subtle synonym swaps
+
+### Features
+- Bypass Twitter's anti-spam duplicate content blocker
+- Natural, human-like text variations
+- Preview variations before posting
+- No manual rewriting needed
+
+### Use Case
+Solves the problem of posting the same announcement from multiple Twitter accounts (e.g., company + personal accounts) without triggering Twitter's duplicate content detection.
+
+### Technical
+- Uses bash `shuf` for randomization
+- Attempts up to 10 variation tries to ensure change
+- Fallback emoji injection if no variation applied
+- Integrates into existing post.sh workflow
+
 ## [1.3.0] - 2026-02-10
 
 ### Added
