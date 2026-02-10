@@ -1,10 +1,10 @@
 ---
 name: social-post
-version: 1.2.0
-description: Post and reply to X/Twitter and Farcaster with text and images. Features draft preview, cost transparency, character validation, threads, replies, and image uploads. Consumption-based pricing for X API, pay-per-cast for Farcaster.
+version: 1.3.0
+description: Post and reply to X/Twitter and Farcaster with text and images. Features multi-account support, draft preview, cost transparency, character validation, threads, replies, and image uploads. Consumption-based pricing for X API, pay-per-cast for Farcaster.
 author: 0xdas
 license: MIT
-tags: [twitter, farcaster, social, posting, automation, threads, x-api, consumption-based]
+tags: [twitter, farcaster, social, posting, automation, threads, x-api, consumption-based, multi-account]
 metadata:
   openclaw:
     requires:
@@ -18,6 +18,7 @@ Post to Twitter and/or Farcaster with automatic character limit validation and i
 
 ## Features
 
+- ✅ **Multi-account support** - manage multiple Twitter accounts from one skill
 - ✅ Post to Twitter only
 - ✅ Post to Farcaster only  
 - ✅ Post to both platforms simultaneously
@@ -84,6 +85,37 @@ X_USER_ID=your_user_id
 # Dry run (won't post)
 scripts/post.sh --twitter --dry-run "Test message"
 ```
+
+### Multi-Account Setup (Optional)
+
+You can manage multiple Twitter accounts by adding additional credentials with custom prefixes.
+
+**Example: Adding a second account**
+
+```bash
+# Add credentials with custom prefix (e.g., MYACCOUNT_)
+echo "MYACCOUNT_API_KEY=xxx" >> ~/.openclaw/.env
+echo "MYACCOUNT_API_KEY_SECRET=xxx" >> ~/.openclaw/.env
+echo "MYACCOUNT_ACCESS_TOKEN=xxx" >> ~/.openclaw/.env
+echo "MYACCOUNT_ACCESS_TOKEN_SECRET=xxx" >> ~/.openclaw/.env
+```
+
+**Usage:**
+```bash
+# Post from default account (X_*)
+scripts/post.sh --twitter "Message from default account"
+
+# Post from custom account
+scripts/post.sh --account myaccount --twitter "Message from second account"
+
+# Reply from custom account
+scripts/reply.sh --account myaccount --twitter TWEET_ID "Reply from second account"
+```
+
+**Naming convention:**
+- Default account: `X_CONSUMER_KEY`, `X_CONSUMER_SECRET`, etc.
+- Custom accounts: `{PREFIX}_API_KEY`, `{PREFIX}_API_KEY_SECRET`, `{PREFIX}_ACCESS_TOKEN`, `{PREFIX}_ACCESS_TOKEN_SECRET`
+- Use lowercase prefix name in `--account` flag
 
 ### Farcaster Setup
 
@@ -217,6 +249,7 @@ scripts/reply.sh --twitter 123456 --farcaster 0xabcd... "Great discussion!"
 
 - `--twitter` - Post to Twitter only
 - `--farcaster` - Post to Farcaster only
+- `--account <name>` - Twitter account to use (lowercase prefix from .env)
 - `--image <path>` - Attach image
 - `--thread` - Split long text into numbered thread
 - `--shorten-links` - Shorten URLs to save characters
@@ -228,6 +261,7 @@ scripts/reply.sh --twitter 123456 --farcaster 0xabcd... "Great discussion!"
 
 - `--twitter <tweet_id>` - Reply to Twitter tweet with this ID
 - `--farcaster <cast_hash>` - Reply to Farcaster cast with this hash
+- `--account <name>` - Twitter account to use (lowercase prefix from .env)
 - `--image <path>` - Attach image to reply
 - `--shorten-links` - Shorten URLs to save characters
 - `--truncate` - Auto-truncate if over limit
@@ -239,8 +273,11 @@ scripts/reply.sh --twitter 123456 --farcaster 0xabcd... "Great discussion!"
 ### Posting Examples
 
 ```bash
-# Quick post to both
+# Quick post to both (default account)
 scripts/post.sh "gm! Building onchain 🦞"
+
+# Post from specific Twitter account
+scripts/post.sh --account myaccount --twitter "Message from my second account"
 
 # Twitter announcement with image
 scripts/post.sh --twitter --image ~/screenshot.png "New feature shipped! 🚀"
@@ -269,6 +306,9 @@ scripts/post.sh --yes "Automated post from CI/CD"
 ```bash
 # Reply to a Twitter thread
 scripts/reply.sh --twitter 1234567890123456789 "Totally agree with this take! 💯"
+
+# Reply from specific Twitter account
+scripts/reply.sh --account myaccount --twitter 1234567890 "Replying from my second account"
 
 # Reply to Farcaster cast
 scripts/reply.sh --farcaster 0xa1b2c3d4e5f6... "Great insight! Have you considered...?"

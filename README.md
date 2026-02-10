@@ -2,7 +2,7 @@
 
 > Post and reply to X/Twitter and Farcaster from one command.
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-skill-orange.svg)](https://openclaw.ai)
 
@@ -10,6 +10,7 @@
 
 ## Features
 
+✅ **Multi-account support** - Manage multiple Twitter accounts from one skill  
 ✅ **Multi-platform posting** - X/Twitter, Farcaster, or both simultaneously  
 ✅ **Reply support** - Reply to specific tweets and casts with text and images  
 ✅ **Draft preview** - See exactly what will be posted before confirmation  

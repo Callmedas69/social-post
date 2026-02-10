@@ -23,6 +23,7 @@ THREAD_MODE=false
 SHORTEN_LINKS=false
 AUTO_CONFIRM=false
 TEXT=""
+TWITTER_ACCOUNT="mr_crtee"  # Default account
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -59,6 +60,10 @@ while [[ $# -gt 0 ]]; do
       AUTO_CONFIRM=true
       shift
       ;;
+    --account)
+      TWITTER_ACCOUNT="$2"
+      shift 2
+      ;;
     --help|-h)
       cat <<EOF
 Usage: post.sh [OPTIONS] "Your message"
@@ -68,6 +73,7 @@ Post to Twitter and/or Farcaster with text and optional image.
 Options:
   --twitter         Post to Twitter only
   --farcaster       Post to Farcaster only
+  --account <name>  Twitter account (mr_crtee or oxdasx, default: mr_crtee)
   --image <path>    Attach image
   --truncate        Auto-truncate if over limit
   --thread          Split long text into thread
@@ -77,8 +83,9 @@ Options:
   --help            Show this help
 
 Examples:
-  post.sh "gm!"                                        # Both platforms
-  post.sh --twitter "Twitter only"                     # Twitter only
+  post.sh "gm!"                                        # Both platforms (mr_crtee)
+  post.sh --twitter "Twitter only"                     # Twitter only (mr_crtee)
+  post.sh --account oxdasx --twitter "From 0xdas"      # Twitter as @0xdasx
   post.sh --farcaster "Farcaster only"                 # Farcaster only
   post.sh --image photo.jpg "Check this out"          # Both with image
   post.sh --thread "Very long text..."                # Auto-thread
@@ -194,7 +201,7 @@ echo "────────────────────────�
 [ -n "$IMAGE_PATH" ] && echo "Image: $IMAGE_PATH"
 echo ""
 echo "Targets:"
-[ "$POST_TWITTER" = true ] && echo "  • Twitter"
+[ "$POST_TWITTER" = true ] && echo "  • Twitter (@${TWITTER_ACCOUNT})"
 [ "$POST_FARCASTER" = true ] && echo "  • Farcaster"
 echo ""
 
@@ -220,6 +227,9 @@ elif [ "$AUTO_CONFIRM" = true ]; then
   echo "Auto-confirmed (--yes flag). Proceeding..."
   echo ""
 fi
+
+# Export Twitter account for library to use
+export TWITTER_ACCOUNT
 
 # Post to platforms
 echo "=== Posting ==="
